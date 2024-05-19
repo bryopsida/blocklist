@@ -1,7 +1,7 @@
 name: Update block lists
 on:
     schedule:
-      - cron: "0 0 * * *"
+      - cron: "15 * * * *"
     workflow_dispatch:
 jobs:
     update:
@@ -11,6 +11,8 @@ jobs:
             - ubuntu-latest
         steps:
             - uses: actions/checkout@v4
+              with:
+                lfs: true
             - uses: actions/setup-node@v4
               with:
                 cache: 'npm'
