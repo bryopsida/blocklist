@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "update": "node ./buildDNSBlocklist.mjs",
+    "update": "node ./buildDNSBlocklist.mjs && node ./buildIpBlocklist.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
