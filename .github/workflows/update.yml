@@ -15,7 +15,8 @@ jobs:
               with:
                 cache: 'npm'
                 node-version: '22'
-            - run: node ./buildDNSBlocklist.mjs
+            - run: npm ci
+            - run: npm run update
             - run: |
                 # configure user
                 git config --global user.name "${{ github.actor }}"
