@@ -99,7 +99,8 @@ const urls = [
   'https://dsi.ut-capitole.fr/blacklists/download/vpn.tar.gz',
   'https://dsi.ut-capitole.fr/blacklists/download/violence.tar.gz',
   'https://dsi.ut-capitole.fr/blacklists/download/warez.tar.gz',
-  'https://dsi.ut-capitole.fr/blacklists/download/webmail.tar.gz'
+  'https://dsi.ut-capitole.fr/blacklists/download/webmail.tar.gz',
+  'https://dsi.ut-capitole.fr/blacklists/download/adult.tar.gz'
 ]
 
 
@@ -215,11 +216,14 @@ for (let key of blocked) {
   }
 }
 blockedNormalizedHosts = blockedNormalizedHosts.sort()
-for (const blockedHost of blockedNormalizedHosts) {
-  blockList += blockedHost + '\n'
+const half = blockedNormalizedHosts.length/2
+const lists = [blockedNormalizedHosts.slice(0, half),blockedNormalizedHosts.slice(half)]
+for(const i in lists) {
+  const fileStream = createWriteStream(`dns${i}.txt`)
+  let blockList = ''
+  for (const blockedHost of lists[i]) {
+    blockList += blockedHost + '\n'
+  }
+  const blockStream = Readable.from(Buffer.from(blockList))
+  await pipe(blockStream, fileStream)
 }
-
-const fileStream = createWriteStream('dns.txt')
-const blockStream = Readable.from(Buffer.from(blockList))
-
-await pipe(blockStream, fileStream)
