@@ -2,6 +2,19 @@
 import { writeFile } from 'fs/promises'
 import { URL } from 'url'
 import axios from 'axios'
+import { extract } from 'tar-stream'
+import { Readable } from 'stream'
+import gunzip from "gunzip-maybe"
+
+process.on('uncaughtException', (err) => {
+  console.error(err)
+  process.exit(1)
+})
+
+process.on('unhandledRejection', (err) => {
+  console.error(err)
+  process.exit(2)
+})
 
 function isValidUrl (s) {
   try {
@@ -87,9 +100,63 @@ const urls = [
   'https://dsi.ut-capitole.fr/blacklists/download/adult.tar.gz'
 ]
 
-const requests = urls.map((url) => axios.get(url))
 
-const responses = await Promise.all(requests)
+function extractUT1DomainFileFromGzipStream(resp) {
+  // will be a domains entry
+  // if we find it replace resp.data with the plain text version
+  // if we don't find it, leave as is
+  return new Promise((resolve) => {
+    const extractStream = extract()
+    const tarGzStream = typeof resp.data === 'string' ? Readable.from(Buffer.from(resp.data)) : Readable.from(resp.data)
+    let foundDomains = false
+    extractStream.on('entry', (header, stream, next) => {
+      if(header.name.endsWith('domains')) {
+        const chunks = []
+        stream.on('data', (chunk) => chunks.push(chunk))
+        stream.on('end', () => {
+          resp.data = Buffer.concat(chunks).toString('utf8')
+          foundDomains = true
+          next()
+        })
+      } else {
+        next()
+      }
+    })
+    extractStream.on('end', () => {
+      next()
+    })
+    extractStream.on('error', (err) => {
+      console.error(err)
+    })
+    extractStream.on('finish', () => {
+      if(!foundDomains) {
+        resp.data = ''
+        console.warn(`Failed to extract domain list form ${resp.headers}`)
+      }
+      resolve(resp)
+    })
+    tarGzStream.pipe(gunzip()).pipe(extractStream)
+  })
+}
+
+const requests = urls.map((url) => axios.get(url, {
+  decompress: !url.endsWith('tar.gz'),
+  responseType: url.endsWith('tar.gz') ? 'arraybuffer' : 'text'
+}).then((resp) => {
+  if (resp.headers['content-type'] === 'application/x-gzip' || typeof resp.data !== 'string') {
+    return extractUT1DomainFileFromGzipStream(resp)
+  } else {
+    return resp
+  }
+}).catch((err) => {
+  console.error(err)
+  process.exit(3)
+}))
+
+const responses = await Promise.all(requests).catch((err) => {
+  console.error(err)
+  process.exit(1)
+})
 
 const lines = responses.map((resp) => resp.data.split('\n')).flat()
 const blocked = new Set()
