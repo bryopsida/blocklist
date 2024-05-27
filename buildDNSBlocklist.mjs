@@ -6,7 +6,6 @@ import { extract } from 'tar-stream'
 import { pipeline, Readable } from 'node:stream'
 import gunzip from "gunzip-maybe"
 import { promisify } from 'node:util'
-import { createGzip } from 'node:zlib'
 
 const pipe = promisify(pipeline)
 
@@ -100,8 +99,7 @@ const urls = [
   'https://dsi.ut-capitole.fr/blacklists/download/vpn.tar.gz',
   'https://dsi.ut-capitole.fr/blacklists/download/violence.tar.gz',
   'https://dsi.ut-capitole.fr/blacklists/download/warez.tar.gz',
-  'https://dsi.ut-capitole.fr/blacklists/download/webmail.tar.gz',
-  'https://dsi.ut-capitole.fr/blacklists/download/adult.tar.gz'
+  'https://dsi.ut-capitole.fr/blacklists/download/webmail.tar.gz'
 ]
 
 
@@ -221,8 +219,7 @@ for (const blockedHost of blockedNormalizedHosts) {
   blockList += blockedHost + '\n'
 }
 
-const fileStream = createWriteStream('dns.txt.gz')
+const fileStream = createWriteStream('dns.txt')
 const blockStream = Readable.from(Buffer.from(blockList))
-const gzip = createGzip()
 
-await pipe(blockStream, gzip, fileStream)
+await pipe(blockStream, fileStream)
