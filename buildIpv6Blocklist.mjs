@@ -7,7 +7,8 @@ import { Address6 } from 'ip-address'
 
 const feeds = [
   'https://www.myip.ms/files/blacklist/csf/latest_blacklist.txt',
-  'https://www.spamhaus.org/drop/dropv6.txt'
+  'https://www.spamhaus.org/drop/dropv6.txt',
+  'https://raw.githubusercontent.com/Sekhan/TheGreatWall/master/TheGreatWall_ipv6'
 ]
 
 const requests = feeds.map((url) => axios.get(url))
