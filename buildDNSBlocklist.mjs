@@ -1,10 +1,14 @@
 #!/usr/bin/env node
-import { writeFile } from 'fs/promises'
-import { URL } from 'url'
+import { createWriteStream } from 'node:fs'
+import { URL } from 'node:url'
 import axios from 'axios'
 import { extract } from 'tar-stream'
-import { Readable } from 'stream'
+import { pipeline, Readable } from 'node:stream'
 import gunzip from "gunzip-maybe"
+import { promisify } from 'node:util'
+import { createGzip } from 'node:zlib'
+
+const pipe = promisify(pipeline)
 
 process.on('uncaughtException', (err) => {
   console.error(err)
@@ -111,14 +115,17 @@ function extractUT1DomainFileFromGzipStream(resp) {
     let foundDomains = false
     extractStream.on('entry', (header, stream, next) => {
       if(header.name.endsWith('domains')) {
+        
         const chunks = []
         stream.on('data', (chunk) => chunks.push(chunk))
+
         stream.on('end', () => {
           resp.data = Buffer.concat(chunks).toString('utf8')
           foundDomains = true
           next()
         })
       } else {
+        stream.resume()
         next()
       }
     })
@@ -214,4 +221,8 @@ for (const blockedHost of blockedNormalizedHosts) {
   blockList += blockedHost + '\n'
 }
 
-await writeFile('dns.txt', blockList)
+const fileStream = createWriteStream('dns.txt.gz')
+const blockStream = Readable.from(Buffer.from(blockList))
+const gzip = createGzip()
+
+await pipe(blockStream, gzip, fileStream)
