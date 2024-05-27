@@ -216,8 +216,17 @@ for (let key of blocked) {
   }
 }
 blockedNormalizedHosts = blockedNormalizedHosts.sort()
-const half = blockedNormalizedHosts.length/2
-const lists = [blockedNormalizedHosts.slice(0, half),blockedNormalizedHosts.slice(half)]
+const quarters = blockedNormalizedHosts.length/4
+
+const quarter1Start = 0
+const quarter1End = quarters * 1
+const quarter2Start = quarters * 1
+const quarter2End = quarters * 2
+const quarter3Start = quarters * 2
+const quarter3End = quarters * 3
+const quarter4Start = quarters * 3
+
+const lists = [blockedNormalizedHosts.slice(quarter1Start, quarter1End), blockedNormalizedHosts.slice(quarter2Start, quarter2End), blockedNormalizedHosts.slice(quarter3Start, quarter3End), blockedNormalizedHosts.slice(quarter4Start)]
 for(const i in lists) {
   const fileStream = createWriteStream(`dns${i}.txt`)
   let blockList = ''
