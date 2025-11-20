@@ -1,0 +1,25 @@
+{
+  "name": "blocklist",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "update": "node --max-old-space-size=4096 ./buildDNSBlocklist.mjs && node ./buildIpv4Blocklist.mjs && node ./buildIpv6Blocklist.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "standard .",
+    "lint:fix": "standard . --fix"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "gunzip-maybe": "^1.4.2",
+    "ip-address": "^9.0.5",
+    "ip-cidr": "^4.0.0",
+    "ipaddr.js": "^2.2.0",
+    "tar-stream": "^3.1.7"
+  },
+  "devDependencies": {
+    "standard": "^17.1.0"
+  }
+}
