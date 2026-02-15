@@ -31,7 +31,6 @@ function isValidUrl (s) {
 const urls = [
   'https://big.oisd.nl/dnsmasq',
   'https://raw.githubusercontent.com/gieljnssns/Social-media-Blocklists/master/pihole-youtube.txt',
-  'https://raw.githubusercontent.com/gieljnssns/Social-media-Blocklists/master/pihole-youtube.txt',
   'https://raw.githubusercontent.com/gieljnssns/Social-media-Blocklists/master/adguard-facebook.txt',
   'https://raw.githubusercontent.com/gieljnssns/Social-media-Blocklists/master/adguard-tiktok.txt',
   'https://raw.githubusercontent.com/gieljnssns/Social-media-Blocklists/master/adguard-reddit.txt',
