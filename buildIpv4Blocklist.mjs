@@ -4,6 +4,7 @@ import axios from 'axios'
 import ipaddr from 'ipaddr.js'
 import IPCIDR from 'ip-cidr'
 import { Address4 } from 'ip-address'
+import randomUserAgent from 'random-useragent'
 
 const feeds = [
   'https://feodotracker.abuse.ch/downloads/ipblocklist_recommended.txt',
@@ -25,7 +26,8 @@ const feeds = [
 const requests = feeds.map((url) => axios.get(url, {
   decompress: true,
   headers: {
-    'accept-encoding': 'gzip,deflate'
+    'accept-encoding': 'gzip,deflate',
+    'User-Agent': randomUserAgent.getRandom()
   }
 }))
 const responses = await Promise.all(requests)
