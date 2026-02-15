@@ -4,14 +4,18 @@ import axios from 'axios'
 import ipaddr from 'ipaddr.js'
 import IPCIDR from 'ip-cidr'
 import { Address6 } from 'ip-address'
+import randomUserAgent from 'random-useragent'
 
 const feeds = [
-  'https://www.myip.ms/files/blacklist/csf/latest_blacklist.txt',
   'https://www.spamhaus.org/drop/dropv6.txt',
   'https://raw.githubusercontent.com/Sekhan/TheGreatWall/master/TheGreatWall_ipv6'
 ]
 
-const requests = feeds.map((url) => axios.get(url))
+const requests = feeds.map((url) => axios.get(url, {
+  headers: {
+    'User-Agent': randomUserAgent.getRandom()
+  }
+}))
 const responses = await Promise.all(requests)
 
 function isValid (input) {

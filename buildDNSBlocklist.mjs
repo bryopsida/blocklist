@@ -6,6 +6,7 @@ import { extract } from 'tar-stream'
 import { pipeline, Readable } from 'node:stream'
 import gunzip from "gunzip-maybe"
 import { promisify } from 'node:util'
+import randomUserAgent from 'random-useragent'
 
 const pipe = promisify(pipeline)
 
@@ -46,7 +47,6 @@ const urls = [
   'https://v.firebog.net/hosts/Easyprivacy.txt',
   'https://bitbucket.org/ethanr/dns-blacklists/raw/8575c9f96e5b4a1308f2f12394abd86d0927a4a0/bad_lists/Mandiant_APT1_Report_Appendix_D.txt',
   'https://raw.githubusercontent.com/DandelionSprout/adfilt/master/Alternate%20versions%20Anti-Malware%20List/AntiMalwareHosts.txt',
-  'https://osint.digitalside.it/Threat-Intel/lists/latestdomains.txt',
   'https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt',
   'https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt',
   'https://blocklistproject.github.io/Lists/alt-version/malware-nl.txt',
@@ -146,6 +146,9 @@ function extractUT1DomainFileFromGzipStream(resp) {
 }
 
 const requests = urls.map((url) => axios.get(url, {
+  headers: {
+    'User-Agent': randomUserAgent.getRandom()
+  },
   decompress: !url.endsWith('tar.gz'),
   responseType: url.endsWith('tar.gz') ? 'arraybuffer' : 'text'
 }).then((resp) => {
