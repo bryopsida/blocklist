@@ -12,7 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.6.8",
+    "axios": "^1.15.0",
     "gunzip-maybe": "^1.4.2",
     "ip-address": "^10.0.0",
     "ip-cidr": "^4.0.0",
