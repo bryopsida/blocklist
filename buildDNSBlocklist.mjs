@@ -203,7 +203,7 @@ const stripPatterns = ['server=/', '/', '||', '^', '0.0.0.0', '127.0.0.1']
 
 for (const line of lines) {
   const isExcludedLineFormat = excludedLines.some((ele) => ele === line)
-  const isSafeDomain = safeDomains.some((ele) => !line.endsWith(ele))
+  const isSafeDomain = safeDomains.some((ele) => line.endsWith(ele))
   if (!cantStartWith.some((blockedPrefix) => line.startsWith(blockedPrefix)) && !isExcludedLineFormat && !isSafeDomain) {
     blocked.add(line)
   } else if(isSafeDomain) {
