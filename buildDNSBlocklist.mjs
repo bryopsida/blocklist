@@ -20,7 +20,7 @@ process.on('unhandledRejection', (err) => {
   process.exit(2)
 })
 
-function isValidUrl (s) {
+function isValidUrl(s) {
   try {
     new URL(`https://${s}`)
     return true
@@ -112,8 +112,8 @@ function extractUT1DomainFileFromGzipStream(resp) {
     const tarGzStream = typeof resp.data === 'string' ? Readable.from(Buffer.from(resp.data)) : Readable.from(resp.data)
     let foundDomains = false
     extractStream.on('entry', (header, stream, next) => {
-      if(header.name.endsWith('domains')) {
-        
+      if (header.name.endsWith('domains')) {
+
         const chunks = []
         stream.on('data', (chunk) => chunks.push(chunk))
 
@@ -134,7 +134,7 @@ function extractUT1DomainFileFromGzipStream(resp) {
       console.error(err)
     })
     extractStream.on('finish', () => {
-      if(!foundDomains) {
+      if (!foundDomains) {
         resp.data = ''
         console.warn(`Failed to extract domain list form ${resp.headers}`)
       }
@@ -188,6 +188,10 @@ const excludedLines = [
   '::1'
 ]
 
+const safeDomains = [
+  'graduacion.unir.net'
+]
+
 const cantStartWith = [
   '#',
   '!#',
@@ -198,8 +202,12 @@ const cantStartWith = [
 const stripPatterns = ['server=/', '/', '||', '^', '0.0.0.0', '127.0.0.1']
 
 for (const line of lines) {
-  if (!cantStartWith.some((blockedPrefix) => line.startsWith(blockedPrefix)) && !excludedLines.some((ele) => ele === line)) {
+  const isExcludedLineFormat = excludedLines.some((ele) => ele === line)
+  const isSafeDomain = safeDomains.some((ele) => !line.endsWith(ele))
+  if (!cantStartWith.some((blockedPrefix) => line.startsWith(blockedPrefix)) && !isExcludedLineFormat && !isSafeDomain) {
     blocked.add(line)
+  } else if(isSafeDomain) {
+    console.log(`Treating ${line} as safe domain`)
   }
 }
 let blockList = ''
@@ -218,7 +226,7 @@ for (let key of blocked) {
   }
 }
 blockedNormalizedHosts = blockedNormalizedHosts.sort()
-const quarters = blockedNormalizedHosts.length/4
+const quarters = blockedNormalizedHosts.length / 4
 
 const quarter1Start = 0
 const quarter1End = quarters * 1
@@ -229,7 +237,7 @@ const quarter3End = quarters * 3
 const quarter4Start = quarters * 3
 
 const lists = [blockedNormalizedHosts.slice(quarter1Start, quarter1End), blockedNormalizedHosts.slice(quarter2Start, quarter2End), blockedNormalizedHosts.slice(quarter3Start, quarter3End), blockedNormalizedHosts.slice(quarter4Start)]
-for(const i in lists) {
+for (const i in lists) {
   const fileStream = createWriteStream(`dns${i}.txt`)
   let blockList = ''
   for (const blockedHost of lists[i]) {
