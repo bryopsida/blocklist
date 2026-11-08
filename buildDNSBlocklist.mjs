@@ -6,6 +6,7 @@ import { extract } from 'tar-stream'
 import { pipeline, Readable } from 'node:stream'
 import gunzip from "gunzip-maybe"
 import { promisify } from 'node:util'
+import { safeDomains } from './safeDomains.mjs'
 import randomUserAgent from 'random-useragent'
 
 const pipe = promisify(pipeline)
@@ -186,9 +187,7 @@ const excludedLines = [
   '::1'
 ]
 
-const safeDomains = [
-  'graduacion.unir.net'
-]
+
 
 const cantStartWith = [
   '#',

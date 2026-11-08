@@ -6,6 +6,8 @@ import { extract } from 'tar-stream'
 import { Readable } from 'node:stream'
 import gunzip from "gunzip-maybe"
 import randomUserAgent from 'random-useragent'
+import { safeDomains } from './safeDomains.mjs'
+
 
 process.on('uncaughtException', (err) => {
   console.error(err)
