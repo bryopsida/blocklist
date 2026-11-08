@@ -12,7 +12,6 @@ const feeds = [
   'https://cinsarmy.com/list/ci-badguys.txt',
   'https://rules.emergingthreats.net/fwrules/emerging-Block-IPs.txt',
   'https://rules.emergingthreats.net/blockrules/compromised-ips.txt',
-  'https://isc.sans.edu/block.txt',
   'https://www.spamhaus.org/drop/drop.txt',
   'https://www.spamhaus.org/drop/edrop.txt',
   // 'https://talosintelligence.com/documents/ip-blacklist',
