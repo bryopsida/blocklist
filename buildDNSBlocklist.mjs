@@ -54,7 +54,6 @@ const urls = [
   'https://blocklistproject.github.io/Lists/alt-version/scam-nl.txt',
   'https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt',
   'https://blocklistproject.github.io/Lists/alt-version/ransomware-nl.txt',
-  'https://raw.githubusercontent.com/stamparm/aux/master/maltrail-malware-domains.txt',
   'https://raw.githubusercontent.com/StevenBlack/hosts/master/data/StevenBlack/hosts',
   'https://raw.githubusercontent.com/Sekhan/TheGreatWall/master/TheGreatWall.txt',
   'https://raw.githubusercontent.com/dibdot/DoH-IP-blocklists/master/doh-domains.txt',
