@@ -18,7 +18,6 @@ const feeds = [
   // 'https://talosintelligence.com/documents/ip-blacklist',
   'https://reputation.alienvault.com/reputation.snort',
   'https://blocklist.greensnow.co/greensnow.txt',
-  'https://www.maxmind.com/en/high-risk-ip-sample-list',
   'https://www.binarydefense.com/banlist.txt',
   'https://www.projecthoneypot.org/list_of_ips.php?t=b'
 ]
