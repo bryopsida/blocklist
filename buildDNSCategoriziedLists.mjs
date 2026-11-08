@@ -297,7 +297,6 @@ const excludedLines = [
   'ff00::0 ip6-localnet', 'ff00::0 ip6-mcastprefix', 'ff02::1 ip6-allnodes',
   'ff02::2 ip6-allrouters', 'ff02::3 ip6-allhosts', '=', '::1'
 ]
-const safeDomains = ['graduacion.unir.net']
 const cantStartWith = ['#', '!#', '!', 'if-a-large-hosts-file-contains-this-entry-then-it']
 const stripPatterns = ['server=/', '/', '||', '^', '0.0.0.0', '127.0.0.1']
 
